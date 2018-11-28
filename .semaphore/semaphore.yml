@@ -1,5 +1,5 @@
 version: v1.0
-name: Test
+name: Demo Rails 5 app
 agent:
   machine:
     type: e1-standard-2
@@ -11,15 +11,11 @@ blocks:
       prologue:
         commands:
           - checkout
-          - rm -rf .ruby-version
-          - ruby -v
-          - sem-version ruby 2.4.4
-          - ruby -v
-          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
+          - cache restore gems-$(checksum Gemfile.lock)
           - bundle install --deployment -j 4 --path vendor/bundle
-          - cache store gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock) vendor/bundle
+          - cache store gems-$(checksum Gemfile.lock) vendor/bundle
           - sem-service start postgres
-          - bundle exec rake db:create db:migrate db:test:prepare
+          - bundle exec rake db:setup
 
       jobs:
       - name: RSpec - models
@@ -29,7 +25,3 @@ blocks:
       - name: RSpec - request specs
         commands:
           - bundle exec rspec
-
-promotions:
-  - name: Deploy to Heroku
-    pipeline_file: heroku.yml
