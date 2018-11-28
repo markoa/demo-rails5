@@ -20,6 +20,7 @@ blocks:
     task:
       prologue:
         commands:
+          - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
           - sem-service start postgres
           - bundle exec rake db:setup
