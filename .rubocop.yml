@@ -31,3 +31,6 @@ Layout/EmptyLinesAroundBlockBody:
 
 Layout/EmptyLinesAroundClassBody:
   Enabled: false
+
+Capybara/FeatureMethods:
+  Enabled: false

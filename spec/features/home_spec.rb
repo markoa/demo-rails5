@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "home page", :type => :feature do
+RSpec.feature "home page", type: :feature do
   scenario "User visits the homepage" do
     visit "/"
 
