@@ -27,7 +27,7 @@ blocks:
             - bundle exec rubocop
             - bundle exec brakeman
 
-  - name: Tests
+  - name: Unit tests
     task:
       prologue:
         commands:
@@ -38,10 +38,25 @@ blocks:
           - bundle exec rake db:setup
 
       jobs:
-      - name: RSpec - models
+      - name: RSpec - model tests
         commands:
-          - bundle exec rspec
+          - bundle exec rspec spec/models
 
-      - name: RSpec - request specs
+      - name: RSpec - controller tests
         commands:
-          - bundle exec rspec
+          - bundle exec rspec spec/controllers
+
+  - name: Integration tests
+    task:
+      prologue:
+        commands:
+          - checkout
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
+          - sem-service start postgres
+          - bundle install --deployment --path vendor/bundle
+          - bundle exec rake db:setup
+
+      jobs:
+      - name: RSpec - feature specs
+        commands:
+          - bundle exec rspec spec/features
