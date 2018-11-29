@@ -16,6 +16,16 @@ blocks:
           - bundle install --deployment -j 4 --path vendor/bundle
           - cache store gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock) vendor/bundle
 
+  - name: Code scanning
+    task:
+      jobs:
+        - name: rubocop
+          commands:
+            - checkout
+            - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
+            - bundle
+            - bundle exec rubocop
+
   - name: Tests
     task:
       prologue:
