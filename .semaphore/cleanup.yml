@@ -1,0 +1,14 @@
+version: v1.0
+name: clean up
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: clear cache
+    task:
+      jobs:
+      - name: echo
+        commands:
+          - echo $SEMAPHORE_PIPELINE_ID

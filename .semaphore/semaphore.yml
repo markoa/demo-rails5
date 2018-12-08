@@ -26,6 +26,7 @@ blocks:
             - bundle install --deployment --path vendor/bundle
             - bundle exec rubocop
             - bundle exec brakeman
+            - fail
 
   - name: Unit tests
     task:
@@ -60,3 +61,9 @@ blocks:
       - name: RSpec - feature specs
         commands:
           - bundle exec rspec spec/features
+
+promotions:
+  - name: clean up
+  pipeline_file: cleanup.yml
+  - auto_promote_on:
+    - result: failed
